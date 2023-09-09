@@ -1,20 +1,17 @@
 ﻿using RealEstate.Entites;
-using System;
 
 namespace RealEstate.Respositories
 {
 	public interface IHouseRespository
 	{
-		IEnumerable<House> GetAll(); //retorna todas as casas
+		Task<IEnumerable<House>> FindAllAsync();
 
-		House GetById(int idHouse); // retorna uma casa por id
+		Task<House?> FindByIdAsync(int idHouse); // retorna uma casa por id
 
-		void Insert(House house);
+		Task<House> AddAsync(House house);
 
-		void Update(House house);
+		Task DeleteAsync(House house);
 
-		void Delete(int idHouse);
-
-		void Save();
+		Task SaveAsync();
 	}
 }

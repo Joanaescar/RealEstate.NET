@@ -1,4 +1,6 @@
 using RealEstate.Database;
+using RealEstate.Repositories;
+using RealEstate.Respositories;
 using RealEstate.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<HouseService>();
+builder.Services.AddScoped<IHouseService, HouseService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<REDbContext>();
+
+builder.Services.AddScoped<IHouseRespository, HouseRepository>(); // para adicionar ao programa os respositorios criados para house tanto interface como a implementação
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 var app = builder.Build();
 

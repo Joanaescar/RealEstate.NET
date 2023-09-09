@@ -1,4 +1,5 @@
-﻿using RealEstate.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using RealEstate.Database;
 using RealEstate.Entites;
 using RealEstate.Respositories;
 
@@ -6,53 +7,38 @@ namespace RealEstate.Repositories
 {
     public class HouseRepository : IHouseRespository
     {
-        private readonly REDbContext _redbContext;
-        public HouseRepository(REDbContext rEDbContext)
+        private readonly REDbContext _context;
+        public HouseRepository(REDbContext context)
         {
-            _redbContext = rEDbContext;
+            _context = context;
         }
 
-        public void Delete(int idHouse)
+        public async Task<House> AddAsync(House house)
         {
-            var findHouse = _redbContext.Houses.Find(idHouse);
-            if (findHouse != null)
-            {
-                _redbContext.Remove(findHouse);
-            }
+            var entity = await _context.AddAsync(house);
+            return entity.Entity;
         }
 
-        public IEnumerable<House> GetAll()
+        public Task DeleteAsync(House house)
         {
-            return _redbContext.Houses;
+            _context.Remove(house); // o remove não faz o await
+            return Task.CompletedTask; // certificar que a Task está completa uma vez que a função não retorna nada
         }
 
-        public House GetById(int idHouse)
+        public async Task<House?> FindByIdAsync(int idHouse)
         {
-            return _redbContext.Houses.Find(idHouse);
+            return await _context.Houses.FindAsync(idHouse);
+        }
+ 
+
+        public async Task<IEnumerable<House>> FindAllAsync()
+        {
+            return await _context.Houses.ToListAsync();
         }
 
-        public void Insert(House house)
+        public async Task SaveAsync()
         {
-            _redbContext.Add(house);
-        }
-
-        public void Save()
-        {
-            _redbContext.SaveChanges();
-        }
-
-        public void Update(House house)
-        {
-            var houseDb = _redbContext.Houses.Find(house.Id);
-
-            if (houseDb != null)
-            {
-                house.Price = houseDb.Price;
-                house.State = houseDb.State;
-                house.Rooms = houseDb.Rooms;
-                house.Type = houseDb.Type;
-                house.Size = houseDb.Size;
-            }
+            await _context.SaveChangesAsync();
         }
     }
 }
