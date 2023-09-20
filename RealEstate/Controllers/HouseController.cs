@@ -31,7 +31,7 @@ namespace RealEstate.Controllers
             return entity;
         }
 
-        [HttpDelete(Name = "DeleteHouse")]
+        [HttpDelete("{id}", Name = "DeleteHouse")]
         public async Task DeleteAsync([FromRoute] int id)
         {
             await _houseService.DeleteAsync(id);

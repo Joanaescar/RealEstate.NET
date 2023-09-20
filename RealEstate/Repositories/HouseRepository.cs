@@ -25,9 +25,9 @@ namespace RealEstate.Repositories
             return Task.CompletedTask; // certificar que a Task está completa uma vez que a função não retorna nada
         }
 
-        public async Task<House?> FindByIdAsync(int idHouse)
+        public async Task<House?> FindByIdAsync(int id)
         {
-            return await _context.Houses.FindAsync(idHouse);
+            return await _context.Houses.FindAsync(id);
         }
  
 
