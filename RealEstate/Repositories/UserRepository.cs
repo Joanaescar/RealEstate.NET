@@ -24,6 +24,12 @@ namespace RealEstate.Repositories
             return Task.CompletedTask;
         }
 
+        public async Task UpdateAsync(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<User>> FindAllAsync()
         {
             return await _context.Users.ToListAsync();

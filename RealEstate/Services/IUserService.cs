@@ -10,5 +10,9 @@ namespace RealEstate.Services
         Task AddHouseAsync(int idUser, House house);
 
         Task RemoveHouseAsync(int idUser, House house);
+
+        Task UpdateAsync(User user);
+
+        Task DeleteAsync(int idUser);
     }
 }

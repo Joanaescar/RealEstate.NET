@@ -10,6 +10,8 @@ namespace RealEstate.Respositories
 
 		Task<House> AddAsync(House house);
 
+		Task UpdateAsync(House house);
+
 		Task DeleteAsync(House house);
 
 		Task SaveAsync();

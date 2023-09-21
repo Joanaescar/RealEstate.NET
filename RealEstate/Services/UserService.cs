@@ -16,6 +16,11 @@ namespace RealEstate.Services
         {
             var user = await GetByIdAsync(idUser);
 
+            if(user.Houses == null)
+            {
+                user.Houses = new List<House>();
+            }
+
             user.Houses.Add(house);
 
             await _userRepository.SaveAsync();
@@ -24,7 +29,7 @@ namespace RealEstate.Services
 
         public async Task<User> CreateAsync(User user)
         {
-            var userTaken = _userRepository.FindByUsernameAsync(user.Username); // já está a retorna valor logo existe aquele username
+            var userTaken = await _userRepository.FindByUsernameAsync(user.Username); // já está a retorna valor logo existe aquele username
 
             if (userTaken != null)
             {
@@ -60,6 +65,21 @@ namespace RealEstate.Services
                 user.Houses.Remove(house);
                 await _userRepository.SaveAsync();
             }
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            var existingUser = GetByIdAsync(user.Id);
+            await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task DeleteAsync(int idUser)
+        {
+            User user = await GetByIdAsync(idUser);
+
+            await _userRepository.DeleteAsync(user);
+
+            await _userRepository.SaveAsync();
         }
     }
 }

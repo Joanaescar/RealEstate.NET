@@ -29,7 +29,14 @@ namespace RealEstate.Repositories
         {
             return await _context.Houses.FindAsync(id);
         }
+
+        public async Task UpdateAsync(House house)
+        {
+            _context.Entry(house).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
  
+
 
         public async Task<IEnumerable<House>> FindAllAsync()
         {
@@ -40,5 +47,7 @@ namespace RealEstate.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        
     }
 }

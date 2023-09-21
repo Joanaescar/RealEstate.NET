@@ -2,7 +2,7 @@
 using RealEstate.DTO;
 using RealEstate.Entites;
 using RealEstate.Exceptions;
-using RealEstate.Respositories;
+using RealEstate.Extensions;
 using RealEstate.Services;
 
 namespace RealEstate.Controllers
@@ -18,17 +18,18 @@ namespace RealEstate.Controllers
         }
 
         [HttpGet(Name = "GetHouses")] // é uma identificação
-        public async Task<IEnumerable<House>> GetAllAsync() // é um get que me vai retorna todas as houses que tiverem no repositorio
+        public async Task<IEnumerable<HouseDTO>> GetAllAsync() // é um get que me vai retorna todas as houses que tiverem no repositorio
         {
-            return await _houseService.ListAsync();
+            var houses = await _houseService.ListAsync();
+            return houses.Select(house => house.ToDTO()); //select funciona como map
         }
 
         [HttpPost(Name = "AddHouse")]
-        public async Task<House> AddAsync([FromBody] HouseDTO houseDTO)
+        public async Task<HouseDTO> AddAsync([FromBody] HouseDTO houseDTO)
         {
-            House house = HouseDTO.fromDTO(houseDTO);
+            House house = houseDTO.ToEntity();
             House entity = await _houseService.RegisterAsync(house);
-            return entity;
+            return entity.ToDTO();
         }
 
         [HttpDelete("{id}", Name = "DeleteHouse")]
@@ -40,7 +41,7 @@ namespace RealEstate.Controllers
         [HttpPut("Reserve/{id}", Name = "ReserveHouse")]
         public async Task ReserveAsync([FromRoute] int id, [FromBody] UserDto userDto)
         {
-            User user = UserDto.fromDto(userDto);
+            User user = userDto.ToEntity();
 
             if(user != null)
             {
@@ -56,7 +57,7 @@ namespace RealEstate.Controllers
         [HttpPut("Unreserve/{id}", Name = "UnreserveHouse")]
         public async Task UnreserveAsync([FromRoute] int id, [FromBody] UserDto userDto)
         {
-            User user = UserDto.fromDto(userDto);
+            User user = userDto.ToEntity();
 
             if (user != null)
             {
